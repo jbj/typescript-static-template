@@ -15,6 +15,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { extname, join, relative, resolve } from "node:path";
+import { rm } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { setTimeout as sleep } from "node:timers/promises";
 
@@ -204,7 +205,15 @@ async function main() {
           try {
             await browser?.close();
           } finally {
-            rmSync(profile, { recursive: true, force: true });
+            // Chrome's child processes can finish profile writes just after
+            // its parent exits. Retry transient removal errors, but stay loud
+            // if the run-owned directory cannot be cleaned up.
+            await rm(profile, {
+              recursive: true,
+              force: true,
+              maxRetries: 10,
+              retryDelay: 100,
+            });
           }
         }
       }),
