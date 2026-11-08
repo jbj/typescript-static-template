@@ -3,8 +3,8 @@
 An accessible hello-world web app with TypeScript, Vite, layered documentation,
 bounded verification, and CI-gated GitHub Pages deployment.
 
-[Live example](https://jbj.github.io/typescript-static-template/) ·
-[Use this template](https://github.com/jbj/typescript-static-template/generate)
+[Live example](https://OWNER.github.io/REPO/) ·
+[Use this template](https://github.com/OWNER/REPO/generate)
 
 ## Start an app
 
@@ -47,7 +47,7 @@ Bundle thresholds remain explicit in `scripts/check-bundle.mjs`.
 GitHub templates copy files, **not live repository settings**.
 
 1. Rename the package metadata with `npm pkg set name=your-app` and update the
-   lockfile with `npm install --package-lock-only`. Replace repository/live links
+   lockfile with `npm install --package-lock-only`. Replace `OWNER` and `REPO`
    in this README and [ruleset instructions](.github/rulesets/README.md), the
    path example in `vite.config.ts`, and the owner in `.github/CODEOWNERS`.
 2. Update the working agreement and selected topic guides for your app.

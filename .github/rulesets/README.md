@@ -16,16 +16,16 @@ maintainer can supply independent human approval. See
 4. Fetch the live ruleset and compare it with the intended change.
 
 ```sh
-gh api repos/jbj/typescript-static-template/rulesets
-gh api --method PUT repos/jbj/typescript-static-template/rulesets/<id> \
+gh api repos/OWNER/REPO/rulesets
+gh api --method PUT repos/OWNER/REPO/rulesets/<id> \
   --input .github/rulesets/main.json
-gh api repos/jbj/typescript-static-template/rulesets/<id>
+gh api repos/OWNER/REPO/rulesets/<id>
 ```
 
 To create the ruleset when none exists:
 
 ```sh
-gh api --method POST repos/jbj/typescript-static-template/rulesets \
+gh api --method POST repos/OWNER/REPO/rulesets \
   --input .github/rulesets/main.json
 ```
 
