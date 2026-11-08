@@ -14,7 +14,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { extname, join, relative, resolve } from "node:path";
+import { extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { rm } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -76,8 +76,10 @@ export function serve(req, res) {
   }
   const prefix = pathname.startsWith("/template-preview/") ? "/template-preview/" : "/";
   const name = pathname.slice(prefix.length) || "index.html";
-  const file = resolve(dist, name);
-  if (!file.startsWith(`${resolve(dist)}/`)) {
+  const buildRoot = resolve(dist);
+  const file = resolve(buildRoot, name);
+  const relativeFile = relative(buildRoot, file);
+  if (relativeFile === ".." || relativeFile.startsWith(`..${sep}`) || isAbsolute(relativeFile)) {
     res.writeHead(403).end("outside build");
     return;
   }

@@ -140,7 +140,9 @@ export function buildSheet() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   if (!haveImageMagick()) {
     console.error(
-      "Cannot find ImageMagick.\nInstall it first - on Debian or Ubuntu: sudo apt-get install imagemagick",
+      "Cannot find ImageMagick.\n" +
+        "On Debian or Ubuntu: sudo apt-get install imagemagick.\n" +
+        "On Windows, install ImageMagick and make sure magick.exe is on PATH.",
     );
     process.exit(1);
   }

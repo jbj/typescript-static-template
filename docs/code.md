@@ -19,6 +19,33 @@ The available commands and their current composition live in `package.json` and
 the scripts themselves. Use a command's help or source instead of maintaining a
 second catalogue here.
 
+## Local and CI environments
+
+The project commands work from Windows PowerShell or a Linux shell. Full local
+verification needs Chrome and ImageMagick on Windows, or Chromium and
+ImageMagick on Linux. GitHub Actions runs the same verification on Ubuntu.
+
+On Debian or Ubuntu, install the screenshot tools with:
+
+```sh
+sudo apt-get install chromium imagemagick
+```
+
+On Windows, install Google Chrome and ImageMagick, and make sure ImageMagick's
+`magick.exe` is on `PATH`. Chrome is found in its standard installation
+folders; set these PowerShell variables if either tool is installed elsewhere:
+replace the example paths with the actual locations on your computer.
+
+```powershell
+$env:CHROME_BIN = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+$env:IMAGEMAGICK_BIN = 'C:\Program Files\ImageMagick\magick.exe'
+npm run verify
+```
+
+The variables only apply to the current terminal window.
+The CI workflow's Windows job is available through a manual run; pull-request
+and push checks continue to use Ubuntu.
+
 ## Change the owning abstraction
 
 - Search for the canonical type, table, helper, or check before adding another
@@ -68,9 +95,8 @@ A stack is reviewed and merged from its base upward.
 2. When a pull request's base is not `main`, explicitly request Copilot review;
    it does not start automatically:
 
-   ```sh
-   gh api -X POST repos/<owner>/<repo>/pulls/<number>/requested_reviewers \
-     -f "reviewers[]=copilot-pull-request-reviewer[bot]"
+   ```powershell
+   gh api -X POST repos/<owner>/<repo>/pulls/<number>/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"
    ```
 
 3. Do not push new commits to a branch another open pull request uses as its
@@ -87,7 +113,7 @@ A stack is reviewed and merged from its base upward.
 4. If the upload surface is unavailable, say so and link the screenshot artifact
    from the current CI run instead:
 
-   ```sh
+   ```powershell
    gh run list --branch <branch> --workflow CI --limit 1
    gh run view <run-id>
    ```

@@ -11,10 +11,29 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, rmSync } from "node:fs";
 import { createConnection } from "node:net";
-import { join } from "node:path";
+import { join, win32 } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
-const CHROME = process.env.CHROME_BIN || "chromium";
+export function resolveChromeExecutable({
+  platform = process.platform,
+  env = process.env,
+  exists = existsSync,
+} = {}) {
+  if (env.CHROME_BIN) return env.CHROME_BIN;
+  if (platform !== "win32") return "chromium";
+
+  const chromePath = (base) =>
+    base ? win32.join(base, "Google", "Chrome", "Application", "chrome.exe") : null;
+  const installed = [
+    chromePath(env.PROGRAMFILES),
+    chromePath(env["PROGRAMFILES(X86)"]),
+    chromePath(env.LOCALAPPDATA),
+  ].find((candidate) => candidate && exists(candidate));
+
+  return installed ?? "chrome.exe";
+}
+
+const CHROME = resolveChromeExecutable();
 
 /**
  * Is anything already listening on the debugging port?
@@ -73,9 +92,12 @@ export async function openChrome({ debugPort, profileDir, windowSize = "1280,800
         (browser ? `It says it is ${browser}.\n` : "") +
         "\nThat is nearly always a headless browser left behind by an " +
         "interrupted run.\nIt has to go, because attaching to it would drive " +
-        "the wrong browser and fail\nsomewhere unrelated. Find it and stop it:\n\n" +
-        `    ps -eo pid,cmd | grep '[r]emote-debugging-port=${debugPort}'\n` +
-        "    kill <pid>\n",
+        "the wrong browser and fail\nsomewhere unrelated. Close the leftover " +
+        "headless browser, then try again.\n" +
+        (process.platform === "win32"
+          ? "On Windows, find it in Task Manager and choose End task.\n"
+          : `On Linux, find it with: ps -eo pid,cmd | grep '[r]emote-debugging-port=${debugPort}'\n` +
+            "Then stop it with: kill <pid>\n"),
     );
     process.exit(1);
   }
@@ -107,8 +129,10 @@ export async function openChrome({ debugPort, profileDir, windowSize = "1280,800
     const why = error.code === "ENOENT" ? `no such program: ${CHROME}` : error.message;
     launchError = new Error(
       `Could not start Chrome (${why}).\n` +
-        "Install Chromium, or point CHROME_BIN at the browser to use:\n" +
-        "  CHROME_BIN=google-chrome npm run shot",
+        "Install Chrome/Chromium, or point CHROME_BIN at the browser executable.\n" +
+        (process.platform === "win32"
+          ? "PowerShell: $env:CHROME_BIN = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'; npm run shot\n"
+          : "Linux: CHROME_BIN=google-chrome npm run shot\n"),
     );
   });
 
