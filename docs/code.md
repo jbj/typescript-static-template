@@ -22,23 +22,21 @@ second catalogue here.
 ## Local and CI environments
 
 The project commands work from Windows PowerShell or a Linux shell. Full local
-verification needs Chrome and ImageMagick on Windows, or Chromium and
-ImageMagick on Linux. GitHub Actions runs the same verification on Ubuntu.
+verification needs Chrome on Windows or Chromium on Linux. GitHub Actions runs
+the same verification on Ubuntu.
 
-On Debian or Ubuntu, install the screenshot tools with:
+On Debian or Ubuntu, install Chromium with:
 
 ```sh
-sudo apt-get install chromium imagemagick
+sudo apt-get install chromium
 ```
 
-On Windows, install Google Chrome and ImageMagick, and make sure ImageMagick's
-`magick.exe` is on `PATH`. Chrome is found in its standard installation
-folders; set these PowerShell variables if either tool is installed elsewhere:
-replace the example paths with the actual locations on your computer.
+On Windows, install Google Chrome. Chrome is found in its standard installation
+folders; set this PowerShell variable if it is installed elsewhere. Replace
+the example path with its actual location on your computer.
 
 ```powershell
 $env:CHROME_BIN = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-$env:IMAGEMAGICK_BIN = 'C:\Program Files\ImageMagick\magick.exe'
 npm run verify
 ```
 

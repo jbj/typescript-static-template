@@ -22,7 +22,6 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { openChrome } from "./chrome.mjs";
 import { browserSlots, cpuSlots, freeDebugPort, listenOnFreePort } from "./concurrency.mjs";
 import { buildSheet } from "./shot-sheet.mjs";
-import { requireImageMagick } from "./tools.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const dist = join(root, "dist");
@@ -55,7 +54,6 @@ export function preflight() {
         "Run npm run build.",
     );
   }
-  requireImageMagick();
 }
 
 const MIME = {
@@ -222,7 +220,7 @@ async function main() {
     );
     const failures = results.filter((result) => result.status === "rejected");
     if (failures.length) throw new AggregateError(failures.map((result) => result.reason));
-    assert.ok(buildSheet(), "The screenshot contact sheet was not generated.");
+    assert.ok(await buildSheet(), "The screenshot contact sheet was not generated.");
   } finally {
     server.closeAllConnections();
     await new Promise((resolve, reject) =>
