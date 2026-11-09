@@ -15,18 +15,16 @@ maintainer can supply independent human approval. See
 3. Update that ruleset from the checked-in JSON.
 4. Fetch the live ruleset and compare it with the intended change.
 
-```sh
+```powershell
 gh api repos/OWNER/REPO/rulesets
-gh api --method PUT repos/OWNER/REPO/rulesets/<id> \
-  --input .github/rulesets/main.json
+gh api --method PUT repos/OWNER/REPO/rulesets/<id> --input .github/rulesets/main.json
 gh api repos/OWNER/REPO/rulesets/<id>
 ```
 
 To create the ruleset when none exists:
 
-```sh
-gh api --method POST repos/OWNER/REPO/rulesets \
-  --input .github/rulesets/main.json
+```powershell
+gh api --method POST repos/OWNER/REPO/rulesets --input .github/rulesets/main.json
 ```
 
 The required check context must match the workflow job name. A rename on either

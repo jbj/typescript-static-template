@@ -13,6 +13,8 @@ product requirements.
 - Preserve browser zoom, semantic HTML, and accessible responsive behavior.
 - Do not introduce runtime dependencies or external network services without
   an explicit product requirement.
+- Local development supports Windows PowerShell and Linux; CI runs on Ubuntu.
+  Keep shell-specific setup in [`docs/code.md`](../docs/code.md).
 - Nothing in `docs/` is loaded automatically. Read only the topics the task
   needs.
 

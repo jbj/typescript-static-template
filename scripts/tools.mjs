@@ -1,19 +1,33 @@
 /** Resolve ImageMagick 6/7 for the screenshot contact sheet. */
 import { execFileSync } from "node:child_process";
 
-function have(binary) {
+function isImageMagick(binary) {
   try {
-    execFileSync("/bin/sh", ["-c", 'command -v -- "$1"', "sh", binary], { stdio: "ignore" });
-    return true;
+    const version = execFileSync(binary, ["-version"], { encoding: "utf8" });
+    return /ImageMagick/i.test(version);
   } catch {
     return false;
   }
 }
 
+export function resolveImageMagick({
+  platform = process.platform,
+  env = process.env,
+  supports = isImageMagick,
+} = {}) {
+  if (env.IMAGEMAGICK_BIN) return env.IMAGEMAGICK_BIN;
+
+  const candidates =
+    platform === "win32"
+      ? ["magick.exe", "magick", "convert.exe", "convert"]
+      : ["magick", "convert"];
+  return candidates.find(supports) ?? null;
+}
+
 let binary;
 function imagemagick() {
   if (binary === undefined) {
-    binary = process.env.IMAGEMAGICK_BIN ?? ["magick", "convert"].find(have) ?? null;
+    binary = resolveImageMagick();
   }
   return binary;
 }
@@ -23,7 +37,8 @@ export const haveImageMagick = () => imagemagick() !== null;
 export function requireImageMagick() {
   if (!haveImageMagick()) {
     throw new Error(
-      "Cannot find ImageMagick. On Debian or Ubuntu: sudo apt-get install imagemagick",
+      "Cannot find ImageMagick. On Debian or Ubuntu: sudo apt-get install imagemagick. " +
+        "On Windows, install ImageMagick and make sure magick.exe is on PATH, or set IMAGEMAGICK_BIN.",
     );
   }
 }
