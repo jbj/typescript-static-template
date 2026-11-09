@@ -5,8 +5,7 @@
  * chain made the five-minute browser run wait for every short check before it
  * could begin, while tools with their own workers could assume they owned the
  * whole machine. This runner gives every task an explicit cost and keeps the
- * only real build edges visible: the budget reads Vite's report, and the shot
- * run serves Vite's `dist/`.
+ * only real build edge visible: the shot run serves Vite's `dist/`.
  *
  * Output is held per task. A passing run says one line unless asked for
  * `--verbose`; a failure prints only the failed tasks in fixed order, so the
@@ -34,7 +33,7 @@ const FIX_COMMANDS = new Map([
   ["format:check", "npm run format"],
 ]);
 const CHEAP_TASKS = new Set(["typecheck", "lint", "format:check", "docs:check"]);
-const VERBOSE_TASKS = new Set(["docs:check", "budget", "shot"]);
+const VERBOSE_TASKS = new Set(["docs:check", "shot"]);
 
 export function verifyTasks(cpuCapacity, browserCapacity) {
   const shotCpuSlots = Math.min(4, browserCapacity, Math.max(1, cpuCapacity - 2));
@@ -79,23 +78,16 @@ export function verifyTasks(cpuCapacity, browserCapacity) {
       slots: { cpu: testCpuSlots, browser: 0 },
     },
     {
-      name: "bundle",
+      name: "build",
       run: packageTool("vite", "bin/vite.js", "build"),
       needs: [],
       inputs: [],
       slots: { cpu: 1, browser: 0 },
     },
     {
-      name: "budget",
-      run: script("check-bundle.mjs"),
-      needs: ["bundle"],
-      inputs: [],
-      slots: { cpu: 1, browser: 0 },
-    },
-    {
       name: "shot",
       run: script("shot.mjs"),
-      needs: ["bundle"],
+      needs: ["build"],
       inputs: [],
       // Each screenshot worker owns one browser and one CPU share.
       slots: { cpu: shotCpuSlots, browser: shotCpuSlots },

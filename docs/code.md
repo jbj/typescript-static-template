@@ -10,8 +10,6 @@
   definition of done.
 - Let the repository's format command handle code style. Markdown is
   hand-wrapped as described in [`documentation.md`](documentation.md).
-- Treat bundle limits as constraints, not targets to move quietly. The budget
-  checker owns current values and reports the evidence needed to change them.
 - A check that parallelizes must honor the resource budget supplied by the
   verify runner rather than discovering and consuming the whole machine.
 

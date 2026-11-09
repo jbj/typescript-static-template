@@ -100,12 +100,10 @@ describe("the verify runner", () => {
       "format:check",
       "docs:check",
       "test",
-      "bundle",
-      "budget",
+      "build",
       "shot",
     ]);
-    expect(tasks.find(({ name }) => name === "shot").needs).toEqual(["bundle"]);
-    expect(tasks.find(({ name }) => name === "budget").needs).toEqual(["bundle"]);
+    expect(tasks.find(({ name }) => name === "shot").needs).toEqual(["build"]);
     expect(tasks.filter(({ needs }) => needs.length === 0)).toHaveLength(6);
   });
 
