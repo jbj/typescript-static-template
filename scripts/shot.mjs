@@ -220,7 +220,7 @@ async function main() {
     );
     const failures = results.filter((result) => result.status === "rejected");
     if (failures.length) throw new AggregateError(failures.map((result) => result.reason));
-    assert.ok(buildSheet(), "The screenshot contact sheet was not generated.");
+    assert.ok(await buildSheet(), "The screenshot contact sheet was not generated.");
   } finally {
     server.closeAllConnections();
     await new Promise((resolve, reject) =>
