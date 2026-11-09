@@ -22,7 +22,6 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { openChrome } from "./chrome.mjs";
 import { browserSlots, cpuSlots, freeDebugPort, listenOnFreePort } from "./concurrency.mjs";
 import { buildSheet } from "./shot-sheet.mjs";
-import { requireImageMagick } from "./tools.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const dist = join(root, "dist");
@@ -55,7 +54,6 @@ export function preflight() {
         "Run npm run build.",
     );
   }
-  requireImageMagick();
 }
 
 const MIME = {

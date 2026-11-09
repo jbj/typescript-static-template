@@ -31,12 +31,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install screenshot tools
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends imagemagick fonts-dejavu-core
-
       - name: Resolve Chrome
         run: |
           set -euo pipefail
@@ -55,9 +49,4 @@ jobs:
         run: |
           set -euo pipefail
           node --version
-          if command -v magick >/dev/null 2>&1; then
-            magick --version | head -n 1
-          else
-            convert --version | head -n 1
-          fi
           "$CHROME_BIN" --version

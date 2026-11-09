@@ -39,7 +39,7 @@ application services to set up.
 
 Run `npm run verify` to check the project, or `npm run build` to make its
 publishable files. Full verification works on Windows and Linux and needs
-Chrome or Chromium plus ImageMagick; setup details are in the
+Chrome or Chromium; setup details are in the
 [code guide](docs/code.md#local-and-ci-environments). GitHub also runs the
 checks for you when you make a change. The normal checks run on Linux even if
 you are working on Windows; maintainers can manually run Windows verification to
