@@ -43,8 +43,8 @@ npm run verify
 ```
 
 The variables only apply to the current terminal window.
-The CI workflow's Windows job is available through a manual run; pull-request
-and push checks continue to use Ubuntu.
+The Windows verification workflow is available through a manual run;
+pull-request and push checks continue to use Ubuntu.
 
 ## Change the owning abstraction
 

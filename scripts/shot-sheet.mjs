@@ -14,7 +14,7 @@
  */
 import { existsSync, readdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { magick, haveImageMagick } from "./tools.mjs";
 
@@ -137,7 +137,7 @@ export function buildSheet() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   if (!haveImageMagick()) {
     console.error(
       "Cannot find ImageMagick.\n" +

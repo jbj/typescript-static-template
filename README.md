@@ -42,7 +42,7 @@ publishable files. Full verification works on Windows and Linux and needs
 Chrome or Chromium plus ImageMagick; setup details are in the
 [code guide](docs/code.md#local-and-ci-environments). GitHub also runs the
 checks for you when you make a change. The normal checks run on Linux even if
-you are working on Windows; maintainers can manually run the CI workflow to
+you are working on Windows; maintainers can manually run Windows verification to
 check Windows too.
 
 ## For repository maintainers
